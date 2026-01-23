@@ -1,0 +1,24 @@
+version: '3.8'               # Version of docker-compose syntax
+
+services:                    # All containers go here
+  service-name:
+    image: image:tag         # Use pre-built image
+    build: .                 # OR build from Dockerfile
+    ports:
+      - "host:container"     # Port mapping
+    environment:             # Environment variables
+      - KEY=value
+    volumes:                 # Storage
+      - volume-name:/path
+    depends_on:              # Startup order
+      - other-service
+    networks:                # Network connectivity
+      - my-network
+
+volumes:                     # Define persistent storage
+  volume-name:
+    driver: local
+
+networks:                    # Define networks
+  my-network:
+    driver: bridge
