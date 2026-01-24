@@ -22,3 +22,48 @@ volumes:                     # Define persistent storage
 networks:                    # Define networks
   my-network:
     driver: bridge
+
+
+---
+# Another Example 
+
+# 1. Version: (Optional in newer specs, but '3.8' is common)
+version: '3.8'
+
+# 2. Services: Define the different containers you want to run
+services:
+  # Service A: Your web application
+  web-app:
+    # Build from the Dockerfile in the current directory (.)
+    build: .
+    # OR use a pre-built image from Docker Hub:
+    # image: nginx:latest
+    
+    # Map ports: "Host_Port:Container_Port"
+    ports:
+      - "8080:8000"
+    
+    # Map volumes: Sync files between host and container (great for dev)
+    volumes:
+      - ./src:/app/src
+    
+    # Set environment variables
+    environment:
+      - DEBUG=true
+      - DB_HOST=database
+    
+    # Ensure this starts only after the database is ready
+    depends_on:
+      - database
+
+  # Service B: A database container
+  database:
+    image: postgres:13
+    environment:
+      POSTGRES_PASSWORD: example_password
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+# 3. Volumes: Define persistent storage managed by Docker
+volumes:
+  db-data:
